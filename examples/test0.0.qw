@@ -1,0 +1,1 @@
+nodes := [| n | n in func.instructions : blah && bleh |]

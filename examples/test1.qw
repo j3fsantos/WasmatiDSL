@@ -1,0 +1,7 @@
+foreach func in functions() do { 
+    nodes := [| n | n in func.instructions : n.instType = "call" && n.label = "printf" |];
+    foreach node in nodes do {
+        child := child(node, 1, "ast"); 
+        if (PDGEdge(child, node, "const") = 0) then vulnerability() end 
+    } end 
+} end 
