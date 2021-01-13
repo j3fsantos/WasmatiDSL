@@ -1,7 +1,7 @@
 foreach func in functions() do { 
-    nodes := [| n | n in func.instructions : n.instType = "call" && n.label = "printf" |];
+    nodes := [| n | n in func.instructions : ((n.instType = 22) && (n.label = "$iprintf")) |];
     foreach node in nodes do {
-        child := child(node, 1, "ast"); 
-        if (PDGEdge(child, node, "const") = 0) then vulnerability() end 
+        child := child(node, 0, "ast"); 
+        if (!PDGEdge(child, node, "const")) then vulnerability("Format Strings") end 
     } end 
 } end 

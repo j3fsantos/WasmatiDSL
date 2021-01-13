@@ -31,3 +31,27 @@ let rec to_json (e : t) : string =
         Printf.sprintf "{ \"type\": \"LIT_EXPR\", \"lit\": %s}" (Literal.to_json l)
     | Call (x, es) ->
         Printf.sprintf "{ \"type\": \"CALL_EXPR\", \"var\": \"%s\", \"args\": [%s]}" x (fs es) 
+
+
+let rec map (f : t -> t) (e : t) : t = 
+  let f' = map f in 
+  match f e with 
+  | RangeExpr (e_r, x, e_d, e_p) ->  RangeExpr (f' e_r, x, f' e_d, f' e_p)
+  | LookUp (e, x) -> LookUp (f' e, x)
+  | BinOp (op, e1, e2) -> BinOp (op, f' e1, f' e2)
+  | UnOp (op, e) -> UnOp (op, f' e)
+  | EList es -> EList (List.map f' es)
+  | Var x -> Var x 
+  | Lit l -> Lit l 
+  | Call (f, es) -> Call (f, List.map f' es)
+
+let subst (sbst : Subst.t) (e : t) : t = 
+  let f e = 
+    match e with 
+    | Var x -> 
+        let vo = Subst.get sbst x in 
+        (match vo with 
+        | Some v -> Lit v 
+        | None -> Var x)
+    | _ ->  e in 
+  map f e 

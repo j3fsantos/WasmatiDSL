@@ -65,7 +65,7 @@ expr_target:
       { Expr.RangeExpr (e1, x, e2, e3) }
     (* e.x *)
     | e=expr_target; DOT; x=VAR
-      { Expr.LookUp (e, x) }
+      { Expr.Call (x, [ e ]) }
     (* e1 bop e2 *)
     | e1=expr_target; bop=bop_target; e2=expr_target 
       { Expr.BinOp (bop, e1, e2) }

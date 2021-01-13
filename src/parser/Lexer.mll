@@ -44,8 +44,8 @@ rule read = parse
   (* variables *)
   | var                  { VAR (Lexing.lexeme lexbuf) }
   (* literals *)
-  | float                { Parser.FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
   | int                  { Printf.printf "int"; Parser.INT (int_of_string (Lexing.lexeme lexbuf)) }
+  | float                { Parser.FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
   | '"'                  { read_string (Buffer.create 17) lexbuf }
   | eof                  { EOF }
 
